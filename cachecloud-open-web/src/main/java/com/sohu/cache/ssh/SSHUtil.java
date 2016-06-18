@@ -70,7 +70,7 @@ public class SSHUtil {
         try {
             conn = new Connection(ip, port);
             conn.connect(null, 2000, 2000);
-            boolean isAuthenticated = conn.authenticateWithPassword(userName, password);
+            boolean isAuthenticated = conn.authenticateWithNone(userName);
             if (isAuthenticated == false) {
                 throw new Exception("SSH authentication failed with [ userName: " + userName + ", " +
                         "password: " + password + "] on ip: " + ip);
