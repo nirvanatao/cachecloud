@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -70,7 +71,12 @@ public class SSHUtil {
         try {
             conn = new Connection(ip, port);
             conn.connect(null, 2000, 2000);
-            boolean isAuthenticated = conn.authenticateWithNone(userName);
+            boolean isAuthenticated;
+            if(ConstUtils.SSH_AUTH_METHOD.equals(ConstUtils.SshAuthMethod.PUBLICK_KEY)){
+                isAuthenticated = conn.authenticateWithPublicKey(userName ,new File(ConstUtils.SSH_PRIVATE_KEY), null);
+            }else{
+                isAuthenticated = conn.authenticateWithPassword(userName , password);
+            }
             if (isAuthenticated == false) {
                 throw new Exception("SSH authentication failed with [ userName: " + userName + ", " +
                         "password: " + password + "] on ip: " + ip);
@@ -477,6 +483,24 @@ public class SSHUtil {
         }
         return result;
     }
-    
+
+    public static void main(String [] args){
+        Connection conn = null;
+        try {
+            conn = new Connection("192.168.10.5", 11494);
+            conn.connect(null, 2000, 2000);
+            boolean isAuthenticated = conn.authenticateWithPublicKey("cachecloud", new File("/Users/mingtao/.ssh/id_rsa"),null);
+            getMachineInfo(conn);
+            if (isAuthenticated == false) {
+                System.out.println(isAuthenticated);
+            }
+            getMachineInfo(conn);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != conn)
+                conn.close();
+        }
+    }
     
 }

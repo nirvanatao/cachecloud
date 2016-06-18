@@ -73,6 +73,36 @@ public class ConstUtils {
     /**
      * 机器统一的用户名、密码、端口
      */
+
+    public static SshAuthMethod SSH_AUTH_METHOD;
+    public static SshAuthMethod SSH_AUTH_METHOD_DEFAULT = SshAuthMethod.PASSWD;
+    public enum SshAuthMethod{
+            PASSWD("method"),
+            PUBLICK_KEY("publickkey"),
+        ;
+        private String method ;
+        private SshAuthMethod(String method){
+            this.method = method;
+        }
+
+        public String getMethod() {
+            return method;
+        }
+
+        public void setMethod(String method) {
+            this.method = method;
+        }
+
+        public static SshAuthMethod parse(String method){
+            for (SshAuthMethod sshAuthMethod : SshAuthMethod.values()) {
+                if (sshAuthMethod.method.equals(method))
+                    return sshAuthMethod;
+            }
+            throw new IllegalArgumentException("sshAuthMethod value unavailable!!!");
+        }
+
+    }
+
     public static String USERNAME;
     public static String DEFAULT_USERNAME = "cachecloud";
 
@@ -81,6 +111,9 @@ public class ConstUtils {
 
     public static int SSH_PORT_DEFAULT;
     public static int DEFAULT_SSH_PORT_DEFAULT = 22;
+
+    public static String SSH_PRIVATE_KEY;
+    public static String SSH_PRIVATE_KEY_DEFAULT = "/root/.ssh/id_rsa";
 
 
     /**

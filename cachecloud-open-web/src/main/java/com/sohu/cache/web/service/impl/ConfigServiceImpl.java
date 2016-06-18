@@ -63,19 +63,23 @@ public class ConfigServiceImpl implements ConfigService {
 
 
         // ssh相关配置
+        ConstUtils.SSH_AUTH_METHOD = ConstUtils.SshAuthMethod.parse(MapUtils.getString(configMap, "cachecloud.machine.ssh.method", ConstUtils.SSH_AUTH_METHOD_DEFAULT.getMethod()));
+        logger.warn("{}: {}", "ConstUtils.SSH_AUTH_METHOD", ConstUtils.SSH_AUTH_METHOD.getMethod());
+
         ConstUtils.USERNAME = MapUtils.getString(configMap, "cachecloud.machine.ssh.name", ConstUtils.DEFAULT_USERNAME);
         logger.warn("{}: {}", "ConstUtils.USERNAME", ConstUtils.USERNAME);
 
-        
         ConstUtils.PASSWORD = MapUtils.getString(configMap, "cachecloud.machine.ssh.password",
                 ConstUtils.DEFAULT_PASSWORD);
         logger.warn("{}: {}", "ConstUtils.PASSWORD", ConstUtils.PASSWORD);
 
-        
+
         ConstUtils.SSH_PORT_DEFAULT = Integer.parseInt(MapUtils.getString(configMap, "cachecloud.machine.ssh.port",
                 String.valueOf(ConstUtils.DEFAULT_SSH_PORT_DEFAULT)));
         logger.warn("{}: {}", "ConstUtils.SSH_PORT_DEFAULT", ConstUtils.SSH_PORT_DEFAULT);
 
+        ConstUtils.SSH_PRIVATE_KEY = MapUtils.getString(configMap,"cachecloud.machine.ssh.private.key" , ConstUtils.SSH_PRIVATE_KEY_DEFAULT);
+        logger.warn("{}: {}", "ConstUtils.SSH_PRIVATE_KEY", ConstUtils.SSH_PRIVATE_KEY);
 
         // 管理员相关配置
         ConstUtils.SUPER_ADMIN_NAME = MapUtils.getString(configMap, "cachecloud.admin.user.name",
