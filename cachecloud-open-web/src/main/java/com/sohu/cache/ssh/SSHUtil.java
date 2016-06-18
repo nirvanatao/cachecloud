@@ -297,7 +297,12 @@ public class SSHUtil {
             }
             conn = new Connection(ip, port);
             conn.connect(null, 6000, 6000);
-            boolean isAuthenticated = conn.authenticateWithPassword(username, password);
+            boolean isAuthenticated;
+            if(ConstUtils.SSH_AUTH_METHOD.equals(ConstUtils.SshAuthMethod.PUBLICK_KEY)){
+                isAuthenticated = conn.authenticateWithPublicKey(username ,new File(ConstUtils.SSH_PRIVATE_KEY), null);
+            }else{
+                isAuthenticated = conn.authenticateWithPassword(username , password);
+            }
             if (isAuthenticated == false) {
                 throw new Exception("SSH authentication failed with [ userName: " + username + ", password: " + password + "]");
             }
@@ -348,7 +353,12 @@ public class SSHUtil {
         Connection connection = new Connection(ip, port);
         try {
             connection.connect();
-            boolean isAuthed = connection.authenticateWithPassword(username, password);
+            boolean isAuthed;
+            if(ConstUtils.SSH_AUTH_METHOD.equals(ConstUtils.SshAuthMethod.PUBLICK_KEY)){
+                isAuthed = connection.authenticateWithPublicKey(username ,new File(ConstUtils.SSH_PRIVATE_KEY), null);
+            }else{
+                isAuthed = connection.authenticateWithPassword(username , password);
+            }
             if (!isAuthed) {
                 throw new SSHException("auth error.");
             }
